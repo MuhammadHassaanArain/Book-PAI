@@ -1,0 +1,208 @@
+# Sensor Configuration Template for Digital Twin System
+# This file defines the configuration for various sensors in the simulation
+
+# LiDAR Sensor Configuration
+lidar_sensor:
+  # Sensor type identifier
+  type: "lidar"
+
+  # Mounting position relative to robot base
+  position:
+    x: 0.2
+    y: 0.0
+    z: 0.5
+
+  # Mounting orientation (roll, pitch, yaw in radians)
+  orientation:
+    roll: 0.0
+    pitch: 0.0
+    yaw: 0.0
+
+  # Sensor parameters
+  parameters:
+    range_min: 0.1
+    range_max: 30.0
+    angle_min: -2.35619  # -135 degrees in radians
+    angle_max: 2.35619   # 135 degrees in radians
+    angle_increment: 0.00872665  # 0.5 degree resolution
+    scan_time: 0.1
+    time_increment: 0.00025
+
+  # Noise model parameters
+  noise:
+    type: "gaussian"
+    mean: 0.0
+    std_dev: 0.01
+
+  # ROS 2 topic configuration
+  topic:
+    name: "/robot1/lidar/scan"
+    qos:
+      reliability: "reliable"
+      durability: "volatile"
+      depth: 10
+
+# Depth Camera Configuration
+depth_camera:
+  # Sensor type identifier
+  type: "depth_camera"
+
+  # Mounting position relative to robot base
+  position:
+    x: 0.2
+    y: 0.0
+    z: 0.6
+
+  # Mounting orientation (roll, pitch, yaw in radians)
+  orientation:
+    roll: 0.0
+    pitch: 0.0
+    yaw: 0.0
+
+  # Sensor parameters
+  parameters:
+    width: 640
+    height: 480
+    fps: 30
+    fov_horizontal: 1.0472  # 60 degrees in radians
+    fov_vertical: 0.7854    # 45 degrees in radians
+    near_clip: 0.1
+    far_clip: 10.0
+    format: "16UC1"  # 16-bit unsigned integer for depth
+
+  # Noise model parameters
+  noise:
+    type: "gaussian"
+    mean: 0.0
+    std_dev: 0.001
+
+  # ROS 2 topic configuration
+  topic:
+    image_raw: "/robot1/camera/depth/image_raw"
+    camera_info: "/robot1/camera/depth/camera_info"
+    qos:
+      reliability: "best_effort"
+      durability: "volatile"
+      depth: 5
+
+# RGB Camera Configuration
+rgb_camera:
+  # Sensor type identifier
+  type: "rgb_camera"
+
+  # Mounting position relative to robot base
+  position:
+    x: 0.2
+    y: 0.0
+    z: 0.6
+
+  # Mounting orientation (roll, pitch, yaw in radians)
+  orientation:
+    roll: 0.0
+    pitch: 0.0
+    yaw: 0.0
+
+  # Sensor parameters
+  parameters:
+    width: 640
+    height: 480
+    fps: 30
+    fov_horizontal: 1.0472  # 60 degrees in radians
+    fov_vertical: 0.7854    # 45 degrees in radians
+    format: "rgb8"
+
+  # Noise model parameters
+  noise:
+    type: "gaussian"
+    mean: 0.0
+    std_dev: 0.01
+
+  # ROS 2 topic configuration
+  topic:
+    image_raw: "/robot1/camera/rgb/image_raw"
+    camera_info: "/robot1/camera/rgb/camera_info"
+    qos:
+      reliability: "best_effort"
+      durability: "volatile"
+      depth: 5
+
+# IMU Sensor Configuration
+imu_sensor:
+  # Sensor type identifier
+  type: "imu"
+
+  # Mounting position relative to robot base
+  position:
+    x: 0.0
+    y: 0.0
+    z: 0.0
+
+  # Mounting orientation (roll, pitch, yaw in radians)
+  orientation:
+    roll: 0.0
+    pitch: 0.0
+    yaw: 0.0
+
+  # Sensor parameters
+  parameters:
+    # Measurement ranges
+    linear_acceleration_range: 16.0  # in g (9.81 m/s^2)
+    angular_velocity_range: 2000.0   # in degrees/s
+    magnetic_field_range: 1300.0     # in microTesla
+
+    # Update rate in Hz
+    update_rate: 100.0
+
+  # Noise model parameters
+  noise:
+    linear_acceleration:
+      type: "gaussian"
+      mean: 0.0
+      std_dev: 0.017  # ~1.7 mg
+    angular_velocity:
+      type: "gaussian"
+      mean: 0.0
+      std_dev: 0.00087  # ~0.05 deg/s
+    orientation:
+      type: "gaussian"
+      mean: 0.0
+      std_dev: 0.00174  # ~0.1 deg
+
+  # ROS 2 topic configuration
+  topic:
+    name: "/robot1/imu/data"
+    qos:
+      reliability: "reliable"
+      durability: "volatile"
+      depth: 10
+
+# Combined Sensor Mount Configuration
+sensor_mount:
+  # Define a common mounting point for multiple sensors
+  name: "sensor_mount"
+  position:
+    x: 0.2
+    y: 0.0
+    z: 0.6
+  orientation:
+    roll: 0.0
+    pitch: 0.0
+    yaw: 0.0
+  sensors:
+    - "lidar_sensor"
+    - "depth_camera"
+    - "rgb_camera"
+    - "imu_sensor"
+
+# General Sensor Settings
+general:
+  # Simulation time settings
+  use_sim_time: true
+
+  # Sensor data publishing settings
+  publish_tf: true
+  tf_prefix: "robot1"
+
+  # Performance settings
+  max_update_rate: 1000.0
+  sensor_processing_threads: 4

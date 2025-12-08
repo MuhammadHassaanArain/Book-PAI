@@ -1,0 +1,196 @@
+# API Contract for Learning Content - ROS 2 Module
+
+openapi: 3.0.0
+info:
+  title: ROS 2 Learning Content API
+  description: API for accessing and managing educational content for the ROS 2 Robotic Nervous System module
+  version: 1.0.0
+
+paths:
+  /module-1/chapters:
+    get:
+      summary: Get all chapters in Module 1
+      responses:
+        '200':
+          description: List of all chapters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chapter'
+
+  /module-1/chapters/{chapterId}:
+    get:
+      summary: Get specific chapter content
+      parameters:
+        - name: chapterId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the chapter
+      responses:
+        '200':
+          description: Chapter content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chapter'
+        '404':
+          description: Chapter not found
+
+  /module-1/labs:
+    get:
+      summary: Get all lab exercises for Module 1
+      responses:
+        '200':
+          description: List of all lab exercises
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LabExercise'
+
+  /module-1/labs/{labId}:
+    get:
+      summary: Get specific lab exercise
+      parameters:
+        - name: labId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the lab exercise
+      responses:
+        '200':
+          description: Lab exercise content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabExercise'
+        '404':
+          description: Lab exercise not found
+
+  /module-1/assessments:
+    get:
+      summary: Get all assessments for Module 1
+      responses:
+        '200':
+          description: List of all assessments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assessment'
+
+components:
+  schemas:
+    Chapter:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the chapter
+        title:
+          type: string
+          description: Title of the chapter
+        content:
+          type: string
+          description: Markdown content of the chapter
+        learningObjectives:
+          type: array
+          items:
+            type: string
+          description: List of learning objectives
+        duration:
+          type: integer
+          description: Estimated completion time in minutes
+        dependencies:
+          type: array
+          items:
+            type: string
+          description: Prerequisite chapters or concepts
+
+    LabExercise:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the lab
+        title:
+          type: string
+          description: Title of the lab exercise
+        description:
+          type: string
+          description: Brief description of the lab
+        objectives:
+          type: array
+          items:
+            type: string
+          description: Learning objectives for the lab
+        prerequisites:
+          type: array
+          items:
+            type: string
+          description: Required setup or knowledge
+        steps:
+          type: array
+          items:
+            type: string
+          description: Step-by-step instructions
+        expectedOutcome:
+          type: string
+          description: What the student should achieve
+        duration:
+          type: integer
+          description: Estimated completion time in minutes
+
+    Assessment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the assessment
+        title:
+          type: string
+          description: Title of the assessment
+        type:
+          type: string
+          description: Type of assessment (quiz, project, etc.)
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+        passingScore:
+          type: number
+          description: Minimum score required to pass
+        timeLimit:
+          type: integer
+          description: Time limit in minutes
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the question
+        text:
+          type: string
+          description: The question text
+        type:
+          type: string
+          description: Type of question (multiple-choice, short-answer, etc.)
+        options:
+          type: array
+          items:
+            type: string
+          description: Options for multiple-choice questions
+        correctAnswer:
+          type: string
+          description: The correct answer
+        explanation:
+          type: string
+          description: Explanation of the correct answer

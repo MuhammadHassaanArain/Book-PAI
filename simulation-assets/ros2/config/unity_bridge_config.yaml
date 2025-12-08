@@ -1,0 +1,182 @@
+# Unity-ROS Bridge Configuration
+# This file defines the configuration for the Unity-ROS bridge system
+
+# Network Configuration
+network:
+  # IP address for Unity application (if on separate machine)
+  unity_ip: "127.0.0.1"
+
+  # Port for Unity-ROS communication
+  unity_port: 10000
+
+  # ROS 2 bridge port
+  ros_bridge_port: 20000
+
+  # Connection timeout in seconds
+  connection_timeout: 10.0
+
+  # Reconnection settings
+  auto_reconnect: true
+  reconnect_interval: 1.0
+  max_reconnect_attempts: 5
+
+# Topic Mapping Configuration
+topic_mapping:
+  # Gazebo to Unity topic mappings
+  gazebo_to_unity:
+    # Robot state publisher to Unity visualization
+    "/tf": "/unity_tf"
+    "/tf_static": "/unity_tf_static"
+    "/joint_states": "/unity_joint_states"
+
+    # Sensor data to Unity visualization
+    "/robot1/lidar/scan": "/unity_lidar_scan"
+    "/robot1/camera/rgb/image_raw": "/unity_camera_image"
+    "/robot1/imu/data": "/unity_imu_data"
+
+  # Unity to Gazebo topic mappings
+  unity_to_gazebo:
+    # Control commands from Unity
+    "/unity_cmd_vel": "/cmd_vel"
+    "/unity_joint_commands": "/joint_commands"
+
+# Transform Configuration
+transforms:
+  # Settings for synchronizing transforms between Gazebo and Unity
+  synchronization:
+    # How often to synchronize transforms (Hz)
+    frequency: 30.0
+
+    # Maximum allowed latency for transform synchronization (seconds)
+    max_latency: 0.05  # 50ms
+
+    # Whether to interpolate transforms for smoother visualization
+    interpolate_transforms: true
+
+  # Frame mappings between Gazebo and Unity coordinate systems
+  frame_mappings:
+    gazebo_frame: "odom"
+    unity_frame: "unity_world"
+
+  # Coordinate system conversion
+  coordinate_system:
+    # Convert from right-handed (Gazebo) to left-handed (Unity) coordinate system
+    convert_coordinate_system: true
+
+    # Axis mapping: [gazebo_axis, unity_axis, sign_multiplier]
+    axis_mapping:
+      x: ["x", "x", 1]    # Gazebo X -> Unity X
+      y: ["y", "z", 1]    # Gazebo Y -> Unity Z (forward)
+      z: ["z", "y", 1]    # Gazebo Z -> Unity Y (up)
+
+# Synchronization Settings
+synchronization:
+  # Physics synchronization settings
+  physics_sync:
+    # Whether to synchronize physics states
+    enabled: true
+
+    # Synchronization frequency (should match Gazebo update rate)
+    frequency: 1000.0  # Hz
+
+    # Maximum allowed desync before resynchronization
+    max_desync: 0.05  # 50ms
+
+  # Visualization synchronization settings
+  visualization_sync:
+    # Whether to synchronize visualization states
+    enabled: true
+
+    # Visualization update frequency
+    frequency: 60.0  # Hz (target Unity frame rate)
+
+    # Whether to enable interpolation for smooth visualization
+    enable_interpolation: true
+    interpolation_buffer_size: 5
+
+# Performance Settings
+performance:
+  # Settings to optimize Unity-ROS bridge performance
+  qos_profiles:
+    # QoS profile for sensor data (best effort for visualization)
+    sensor_data:
+      reliability: "best_effort"
+      durability: "volatile"
+      depth: 5
+
+    # QoS profile for control commands (reliable)
+    control_commands:
+      reliability: "reliable"
+      durability: "volatile"
+      depth: 10
+
+    # QoS profile for transforms (transient local for reliability)
+    transforms:
+      reliability: "reliable"
+      durability: "transient_local"
+      depth: 10
+
+  # Buffer settings
+  buffers:
+    # Size of message buffers for different data types
+    sensor_buffer_size: 10
+    control_buffer_size: 5
+    transform_buffer_size: 20
+
+  # Threading settings
+  threading:
+    # Number of threads for message processing
+    processing_threads: 4
+
+    # Whether to use separate threads for different message types
+    separate_message_processing: true
+
+# Safety and Validation
+safety:
+  # Settings to ensure safe operation
+  validation:
+    # Whether to validate messages before forwarding
+    validate_messages: true
+
+    # Maximum allowed values for different message types
+    max_values:
+      linear_velocity: 5.0  # m/s
+      angular_velocity: 3.14  # rad/s
+      joint_position: 10.0  # rad or m
+      joint_velocity: 10.0  # rad/s or m/s
+
+  # Limits to prevent excessive resource usage
+  limits:
+    max_message_rate: 1000.0  # messages per second per topic
+    max_message_size: 1048576  # 1 MB per message
+
+# Debug and Logging
+debug:
+  # Debug settings for the Unity-ROS bridge
+  logging:
+    # Enable detailed logging for debugging
+    enable_detailed_logging: false
+
+    # Log level (debug, info, warn, error)
+    log_level: "info"
+
+    # Whether to log message statistics
+    log_statistics: true
+
+  # Debug visualization options
+  debug_visualization:
+    # Whether to enable debug visualization in Unity
+    enable_debug_visualization: false
+
+    # Whether to visualize sensor data streams
+    visualize_sensor_streams: false
+
+# Plugin Configuration
+plugins:
+  # Additional plugins for Unity-ROS bridge functionality
+  enabled_plugins:
+    - "TransformSynchronizer"
+    - "PhysicsSynchronizer"
+    - "SensorDataForwarder"
+    - "ControlCommandHandler"
+    - "VisualizationOptimizer"

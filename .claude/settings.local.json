@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.specify/scripts/bash/create-phr.sh --title \"update-constitution-physical-ai-textbook\" --stage constitution --json)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

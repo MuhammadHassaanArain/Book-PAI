@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  ros2-dev:
+    build: .
+    container_name: ros2-textbook-dev
+    environment:
+      - ROS_DISTRO=humble
+      - DISPLAY=${DISPLAY:-}  # For GUI applications if needed
+    volumes:
+      - .:/home/user/workspace:cached
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw  # For GUI applications if needed
+    ports:
+      - "3000:3000"  # For Docusaurus development server
+      - "3001:3001"
+    working_dir: /home/user/workspace
+    stdin_open: true
+    tty: true
+    command: >
+      bash -c "
+        source /opt/ros/$$ROS_DISTRO/setup.bash &&
+        source ~/.bashrc &&
+        exec bash
+      "
