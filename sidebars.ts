@@ -120,7 +120,7 @@ const sidebars: SidebarsConfig = {
           label: 'References',
           items: [
             'module-2/references/simulation-bibliography',
-            'module-2/references/troubleshooting'
+            'module-2/references/sensor-modeling-literature'
           ],
         }
       ],
