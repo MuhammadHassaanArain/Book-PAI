@@ -213,6 +213,7 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 - Python 3.10+ (for ROS 2 Humble/Iron compatibility), Markdown for documentation + ROS 2 Humble or Iron, rclpy, robot_state_publisher, joint_state_publisher, RViz2, Docusaurus v3+ (001-ros2-robotic-nervous-system)
 - File-based (Markdown documents, URDF/XML files, YAML configuration files) (001-ros2-robotic-nervous-system)
 - Python 3.10+ (for ROS 2 Humble/Iron compatibility), Markdown for documentation + ROS 2 Humble or Iron, rclpy, robot_state_publisher, joint_state_publisher, RViz2, Gazebo Fortress/Harmonic, Unity LTS, Docusaurus v3+ (002-gazebo-unity-digital-twin)
+- Python 3.10+ (for ROS 2 Humble/Iron compatibility), Markdown for documentation + ROS 2 Humble or Iron, NVIDIA Isaac Sim, Isaac ROS, Nav2, rclpy, robot_state_publisher, joint_state_publisher, RViz2, Docusaurus v3+ (001-isaac-robot-brain)
 
 ## Recent Changes
 - 001-ros2-robotic-nervous-system: Added Python 3.10+ (for ROS 2 Humble/Iron compatibility), Markdown for documentation + ROS 2 Humble or Iron, rclpy, robot_state_publisher, joint_state_publisher, RViz2, Docusaurus v3+
