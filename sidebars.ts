@@ -125,6 +125,63 @@ const sidebars: SidebarsConfig = {
         }
       ],
       collapsed: false,
+    },
+    {
+      type: 'category',
+      label: 'Module 3: The AI-Robot Brain (NVIDIA Isaac™)',
+      items: [
+        {
+          type: 'category',
+          label: 'Chapter 1: NVIDIA Isaac Sim for Photorealistic Simulation',
+          items: [
+            'module-3/chapter-1-isaac-sim/1.1-ai-robot-brain-intro',
+            'module-3/chapter-1-isaac-sim/1.2-omniverse-architecture',
+            'module-3/chapter-1-isaac-sim/1.3-photorealistic-rendering',
+            'module-3/chapter-1-isaac-sim/1.4-synthetic-data',
+            'module-3/chapter-1-isaac-sim/1.5-domain-randomization',
+            'module-3/chapter-1-isaac-sim/1.6-urdf-import'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Chapter 2: Hardware-Accelerated Perception with Isaac ROS',
+          items: [
+            'module-3/chapter-2-isaac-ros/2.1-isaac-ros-overview',
+            'module-3/chapter-2-isaac-ros/2.2-jetson-architecture',
+            'module-3/chapter-2-isaac-ros/2.3-image-pipeline',
+            'module-3/chapter-2-isaac-ros/2.4-depth-processing',
+            'module-3/chapter-2-isaac-ros/2.5-vslam',
+            'module-3/chapter-2-isaac-ros/2.6-localization-mapping',
+            'module-3/chapter-2-isaac-ros/2.7-performance-benchmarking'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Chapter 3: Autonomous Navigation with Nav2',
+          items: [
+            'module-3/chapter-3-nav2/3.1-nav-introduction',
+            'module-3/chapter-3-nav2/3.2-nav2-architecture',
+            'module-3/chapter-3-nav2/3.3-global-local-planning',
+            'module-3/chapter-3-nav2/3.4-costmaps',
+            'module-3/chapter-3-nav2/3.5-bipedal-constraints',
+            'module-3/chapter-3-nav2/3.6-sensor-fusion-nav',
+            'module-3/chapter-3-nav2/3.7-recovery-behaviors'
+          ],
+        },
+        // {
+        //   type: 'category',
+        //   label: 'Chapter 4: Sim-to-Real Transfer with NVIDIA Isaac',
+        //   items: [
+        //     'module-3/chapter-4-sim-to-real/4.1-sim-to-real-principles',
+        //     'module-3/chapter-4-sim-to-real/4.2-perception-transfer',
+        //     'module-3/chapter-4-sim-to-real/4.3-navigation-transfer',
+        //     'module-3/chapter-4-sim-to-real/4.4-calibration',
+        //     'module-3/chapter-4-sim-to-real/4.5-latency-safety',
+        //     'module-3/chapter-4-sim-to-real/4.6-field-testing'
+        //   ],
+        // }
+      ],
+      collapsed: false,
     }
   ],
 };

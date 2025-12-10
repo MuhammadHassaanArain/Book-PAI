@@ -1,0 +1,149 @@
+# Educational API Contracts: Module 3 - The AI-Robot Brain (NVIDIA Isaac™)
+
+## Overview
+This document defines the conceptual interfaces and APIs that students will interact with during Module 3. These represent the ROS 2 services, topics, and Isaac ROS components they will use in their learning exercises.
+
+## Isaac Sim API Interface
+
+### Simulation Environment Service
+```
+Service: /isaac_sim/create_environment
+Request:
+  - environment_name: string
+  - robot_model: string
+  - scene_config: string
+Response:
+  - success: bool
+  - environment_id: string
+  - error_message: string (optional)
+```
+
+### Synthetic Data Generation Service
+```
+Service: /isaac_sim/generate_dataset
+Request:
+  - dataset_name: string
+  - sample_count: int
+  - domain_randomization: bool
+  - sensor_config: object
+Response:
+  - success: bool
+  - dataset_path: string
+  - sample_count_generated: int
+  - error_message: string (optional)
+```
+
+## Isaac ROS Perception API
+
+### VSLAM Service
+```
+Service: /isaac_ros/vslam/localize
+Request:
+  - camera_data: sensor_msgs/Image
+  - depth_data: sensor_msgs/Image (optional)
+Response:
+  - success: bool
+  - pose: geometry_msgs/PoseStamped
+  - confidence: float
+  - error_message: string (optional)
+```
+
+### GPU Accelerated Processing Action
+```
+Action: /isaac_ros/perception/accelerate
+Goal:
+  - input_data: sensor_msgs/Image[]
+  - processing_type: string (vslam, depth_processing, stereo_vision)
+  - gpu_config: object
+Feedback:
+  - progress: float
+  - current_stage: string
+Result:
+  - success: bool
+  - output_data: object
+  - processing_time: float
+  - error_message: string (optional)
+```
+
+## Nav2 Navigation API
+
+### Navigation Goal Service
+```
+Service: /nav2/set_goal
+Request:
+  - goal_pose: geometry_msgs/PoseStamped
+  - navigation_mode: string (global, local, both)
+  - humanoid_constraints: bool
+Response:
+  - success: bool
+  - navigation_id: string
+  - error_message: string (optional)
+```
+
+### Path Planning Service
+```
+Service: /nav2/plan_path
+Request:
+  - start_pose: geometry_msgs/PoseStamped
+  - goal_pose: geometry_msgs/PoseStamped
+  - map_id: string
+Response:
+  - success: bool
+  - path: nav_msgs/Path
+  - path_length: float
+  - estimated_time: float
+  - error_message: string (optional)
+```
+
+## Sim-to-Real Transfer API
+
+### Model Transfer Service
+```
+Service: /sim_to_real/transfer_model
+Request:
+  - simulation_model_path: string
+  - target_hardware: string (jetson_orin_nano, jetson_orin_nx)
+  - calibration_required: bool
+Response:
+  - success: bool
+  - deployment_path: string
+  - calibration_needed: bool
+  - error_message: string (optional)
+```
+
+### Hardware Validation Service
+```
+Service: /sim_to_real/validate_deployment
+Request:
+  - hardware_id: string
+  - model_path: string
+  - validation_type: string (performance, accuracy, safety)
+Response:
+  - success: bool
+  - validation_results: object
+  - performance_metrics: object
+  - error_message: string (optional)
+```
+
+## Topic Interfaces
+
+### Perception Data Topic
+```
+Topic: /perception/data_stream
+Message Type: sensor_msgs/Image[]
+Description: Stream of processed sensor data from perception pipeline
+```
+
+### Navigation Status Topic
+```
+Topic: /navigation/status
+Message Type: nav2_msgs/NavigationStatus
+Description: Real-time navigation status updates
+```
+
+### System Performance Topic
+```
+Topic: /system/performance
+Message Type: isaac_ros_msgs/PerformanceMetrics
+Description: GPU utilization, processing time, and other performance metrics
+```
