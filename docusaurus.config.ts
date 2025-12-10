@@ -79,18 +79,18 @@ const config: Config = {
       title: 'Physical AI & Humanoid Robotics',
       logo: {
         alt: 'Physical AI & Humanoid Robotics Logo',
-        src: 'img/logo.svg',
+        src: 'img/logo.png',
       },
       items: [
         {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Book',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
+        // {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/MuhammadHassaanArain/Book-PAI.git',
           label: 'GitHub',
           position: 'right',
         },
