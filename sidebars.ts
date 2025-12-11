@@ -168,18 +168,68 @@ const sidebars: SidebarsConfig = {
             'module-3/chapter-3-nav2/3.7-recovery-behaviors'
           ],
         },
-        // {
-        //   type: 'category',
-        //   label: 'Chapter 4: Sim-to-Real Transfer with NVIDIA Isaac',
-        //   items: [
-        //     'module-3/chapter-4-sim-to-real/4.1-sim-to-real-principles',
-        //     'module-3/chapter-4-sim-to-real/4.2-perception-transfer',
-        //     'module-3/chapter-4-sim-to-real/4.3-navigation-transfer',
-        //     'module-3/chapter-4-sim-to-real/4.4-calibration',
-        //     'module-3/chapter-4-sim-to-real/4.5-latency-safety',
-        //     'module-3/chapter-4-sim-to-real/4.6-field-testing'
-        //   ],
-        // }
+        {
+          type: 'category',
+          label: 'Chapter 4: Sim-to-Real Transfer with NVIDIA Isaac',
+          items: [
+            'module-3/chapter-4-sim-to-real/4.1-sim-to-real-principles',
+            'module-3/chapter-4-sim-to-real/4.2-perception-transfer',
+            'module-3/chapter-4-sim-to-real/4.3-navigation-transfer',
+            'module-3/chapter-4-sim-to-real/4.4-calibration',
+            'module-3/chapter-4-sim-to-real/4.5-latency-safety',
+            'module-3/chapter-4-sim-to-real/4.6-field-testing'
+          ],
+        }
+      ],
+      collapsed: false,
+    },
+    {
+      type: 'category',
+      label: 'Module 4: Advanced ROS 2 Integration & Deployment',
+      items: [
+        'module-4/overview',
+        {
+          type: 'category',
+          label: 'Chapter 1: Advanced ROS 2 Integration',
+          items: [
+            'module-4/chapter-1-ros2-integration/1.1-ros2-integration-overview'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Chapter 2: Jetson Optimization',
+          items: [
+            'module-4/chapter-2-jetson-optimization/2.1-jetson-optimization-basics'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Chapter 3: Humanoid Locomotion',
+          items: [
+            'module-4/chapter-3-humanoid-locomotion/3.1-locomotion-control-basics'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Chapter 4: Field Deployment',
+          items: [
+            'module-4/chapter-4-field-deployment/4.1-field-deployment-strategies'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Labs',
+          items: [
+            'module-4/module-4-labs/lab-1-advanced-deployment'
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Assessments',
+          items: [
+            'module-4/module-4-assessments/module-4-assessment'
+          ],
+        }
       ],
       collapsed: false,
     }
