@@ -1,0 +1,210 @@
+# ROS 2 Interface Contracts: Digital Twin Module
+
+## Overview
+This document defines the ROS 2 interface contracts for the Digital Twin system, specifying the topics, services, and actions that enable communication between Gazebo simulation, Unity visualization, and external ROS 2 nodes.
+
+## Sensor Data Topics
+
+### LiDAR Sensor Interface
+**Topic**: `/sensor/lidar/scan` or `/robot/{id}/lidar/scan`
+**Type**: `sensor_msgs/LaserScan`
+**Direction**: Publisher (Simulation → External)
+
+**Message Fields**:
+- `header`: Standard ROS 2 header with timestamp and frame_id
+- `angle_min`, `angle_max`: Angular range in radians
+- `angle_increment`: Angular resolution in radians
+- `time_increment`: Time between measurements
+- `scan_time`: Time between scans
+- `range_min`, `range_max`: Range limits in meters
+- `ranges`: Array of range measurements
+- `intensities`: Array of intensity measurements
+
+**QoS Profile**: Reliable, transient_local durability
+**Frequency**: 10 Hz (configurable)
+
+### Depth Camera Interface
+**Topic**: `/sensor/camera/depth/image_raw` or `/robot/{id}/camera/depth/image_raw`
+**Type**: `sensor_msgs/Image`
+**Direction**: Publisher (Simulation → External)
+
+**Message Fields**:
+- `header`: Standard ROS 2 header
+- `height`, `width`: Image dimensions
+- `encoding`: Pixel encoding (16UC1 for depth)
+- `is_bigendian`: Endianness flag
+- `step`: Full row length in bytes
+- `data`: Image data array
+
+**QoS Profile**: Reliable, volatile durability
+**Frequency**: 30 Hz (configurable)
+
+### RGB Camera Interface
+**Topic**: `/sensor/camera/rgb/image_raw` or `/robot/{id}/camera/rgb/image_raw`
+**Type**: `sensor_msgs/Image`
+**Direction**: Publisher (Simulation → External)
+
+**Message Fields**:
+- `header`: Standard ROS 2 header
+- `height`, `width`: Image dimensions
+- `encoding`: Pixel encoding (rgb8, bgr8, etc.)
+- `is_bigendian`: Endianness flag
+- `step`: Full row length in bytes
+- `data`: Image data array
+
+**QoS Profile**: Reliable, volatile durability
+**Frequency**: 30 Hz (configurable)
+
+### IMU Sensor Interface
+**Topic**: `/sensor/imu/data` or `/robot/{id}/imu/data`
+**Type**: `sensor_msgs/Imu`
+**Direction**: Publisher (Simulation → External)
+
+**Message Fields**:
+- `header`: Standard ROS 2 header
+- `orientation`: Quaternion representing orientation
+- `orientation_covariance`: Covariance matrix for orientation
+- `angular_velocity`: Angular velocity vector
+- `angular_velocity_covariance`: Covariance matrix for angular velocity
+- `linear_acceleration`: Linear acceleration vector
+- `linear_acceleration_covariance`: Covariance matrix for linear acceleration
+
+**QoS Profile**: Reliable, volatile durability
+**Frequency**: 100 Hz (configurable)
+
+## Control Topics
+
+### Joint State Interface
+**Topic**: `/joint_states`
+**Type**: `sensor_msgs/JointState`
+**Direction**: Publisher (Simulation → External)
+
+**Message Fields**:
+- `header`: Standard ROS 2 header
+- `name`: Array of joint names
+- `position`: Array of joint positions (radians)
+- `velocity`: Array of joint velocities
+- `effort`: Array of joint efforts
+
+**QoS Profile**: Reliable, volatile durability
+**Frequency**: 50 Hz
+
+### Robot State Interface
+**Topic**: `/robot_state`
+**Type**: `nav_msgs/Odometry`
+**Direction**: Publisher (Simulation → External)
+
+**Message Fields**:
+- `header`: Standard ROS 2 header
+- `child_frame_id`: Child frame identifier
+- `pose`: Pose with covariance
+- `twist`: Twist with covariance
+
+**QoS Profile**: Reliable, volatile durability
+**Frequency**: 50 Hz
+
+## Services
+
+### Model Spawning Service
+**Service**: `/spawn_entity`
+**Type**: `gazebo_msgs/SpawnEntity`
+**Direction**: Server (Simulation)
+
+**Request Fields**:
+- `name`: Name of the entity to spawn
+- `xml`: URDF or SDF XML description
+- `robot_namespace`: Robot namespace
+- `initial_pose`: Initial pose with position and orientation
+
+**Response Fields**:
+- `success`: Success flag
+- `status_message`: Status message
+
+### Model Deletion Service
+**Service**: `/delete_entity`
+**Type**: `gazebo_msgs/DeleteEntity`
+**Direction**: Server (Simulation)
+
+**Request Fields**:
+- `name`: Name of the entity to delete
+
+**Response Fields**:
+- `success`: Success flag
+- `status_message`: Status message
+
+### Physics Parameters Service
+**Service**: `/set_physics_properties`
+**Type**: `gazebo_msgs/SetPhysicsProperties`
+**Direction**: Server (Simulation)
+
+**Request Fields**:
+- `time_step`: Physics time step
+- `max_update_rate`: Maximum update rate
+- `gravity`: Gravity vector
+- `ode_config`: ODE physics engine configuration
+
+**Response Fields**:
+- `success`: Success flag
+
+## Actions
+
+### Navigation Action
+**Action**: `/navigate_to_pose`
+**Type**: `nav2_msgs/NavigateToPose`
+**Direction**: Server (Simulation)
+
+**Goal Fields**:
+- `pose`: Target pose with position and orientation
+- `behavior_tree`: Behavior tree to use (optional)
+
+**Result Fields**:
+- `result_code`: Navigation result code
+- `final_pose`: Final pose achieved
+- `distance_remaining`: Distance remaining to goal
+
+**Feedback Fields**:
+- `current_pose`: Current robot pose
+- `distance_remaining`: Distance to goal
+- `time_remaining`: Estimated time to goal
+
+## TF Frames
+
+### Coordinate Frame Hierarchy
+```
+map
+└── odom
+    └── base_link
+        ├── base_footprint
+        ├── imu_link
+        ├── lidar_link
+        ├── camera_depth_optical_frame
+        ├── camera_rgb_optical_frame
+        └── [additional sensor frames]
+```
+
+### Frame Naming Convention
+- `{robot_id}/map`: Global map frame for multi-robot systems
+- `{robot_id}/odom`: Odometry frame
+- `{robot_id}/base_link`: Robot base frame
+- `{robot_id}/{sensor_name}_link`: Individual sensor frames
+- `{robot_id}/{sensor_name}_optical_frame`: Optical frames for cameras
+
+## Validation Requirements
+
+### Message Validation
+- All timestamps must be synchronized with ROS 2 clock
+- Frame IDs must follow naming convention and exist in TF tree
+- Data ranges must be within sensor specifications
+- Message frequencies must match configured rates
+
+### Performance Requirements
+- Sensor data must have <100ms latency from simulation
+- TF transforms must update at 50+ Hz
+- Service calls must respond within 1 second
+- Action goals must provide feedback at 10+ Hz
+
+### Error Handling
+- Invalid requests should return appropriate error codes
+- Missing frames should be reported in status messages
+- Connection failures should be recoverable
+- Resource limits should be enforced gracefully

@@ -1,0 +1,181 @@
+# TF Frame Hierarchy Configuration for Digital Twin System
+# This file defines the coordinate frame relationships in the simulation
+
+# Root frame definitions
+root_frames:
+  # Global map frame (for multi-robot systems)
+  map:
+    parent: null
+    description: "Global map frame for multi-robot systems"
+    static: true
+
+  # Odometry frame
+  odom:
+    parent: "map"
+    description: "Odometry frame"
+    static: false
+
+# Robot-specific frame hierarchy
+robot_frames:
+  # Base robot frame
+  base_link:
+    parent: "odom"
+    description: "Robot base frame"
+    static: false
+
+  # Base footprint frame (for navigation)
+  base_footprint:
+    parent: "base_link"
+    description: "Robot base footprint frame"
+    static: false
+    transform:
+      translation: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 1.0]  # [x, y, z, w] quaternion
+
+  # IMU frame
+  imu_link:
+    parent: "base_link"
+    description: "IMU sensor frame"
+    static: true
+    transform:
+      translation: [0.0, 0.0, 0.1]
+      rotation: [0.0, 0.0, 0.0, 1.0]
+
+  # LiDAR frame
+  lidar_link:
+    parent: "base_link"
+    description: "LiDAR sensor frame"
+    static: true
+    transform:
+      translation: [0.2, 0.0, 0.5]
+      rotation: [0.0, 0.0, 0.0, 1.0]
+
+  # Camera frames (depth and RGB)
+  camera_link:
+    parent: "base_link"
+    description: "Camera mounting frame"
+    static: true
+    transform:
+      translation: [0.2, 0.0, 0.6]
+      rotation: [0.0, 0.0, 0.0, 1.0]
+
+  camera_depth_optical_frame:
+    parent: "camera_link"
+    description: "Depth camera optical frame"
+    static: true
+    transform:
+      translation: [0.0, 0.0, 0.0]
+      rotation: [-0.5, 0.5, -0.5, 0.5]  # Rotate to optical frame (x-forward, y-left, z-up)
+
+  camera_rgb_optical_frame:
+    parent: "camera_link"
+    description: "RGB camera optical frame"
+    static: true
+    transform:
+      translation: [0.0, 0.0, 0.0]
+      rotation: [-0.5, 0.5, -0.5, 0.5]  # Rotate to optical frame (x-forward, y-left, z-up)
+
+# Additional sensor frames
+sensor_frames:
+  # Additional sensor mounting points
+  front_sensor_mount:
+    parent: "base_link"
+    description: "Front sensor mounting point"
+    static: true
+    transform:
+      translation: [0.25, 0.0, 0.4]
+      rotation: [0.0, 0.0, 0.0, 1.0]
+
+  top_sensor_mount:
+    parent: "base_link"
+    description: "Top sensor mounting point"
+    static: true
+    transform:
+      translation: [0.0, 0.0, 0.8]
+      rotation: [0.0, 0.0, 0.0, 1.0]
+
+# Multi-robot frame configuration
+multi_robot_frames:
+  # Template for robot-specific frames
+  robot_1:
+    base_frame: "robot1/base_link"
+    odom_frame: "robot1/odom"
+    map_frame: "map"
+    sensor_frames:
+      imu: "robot1/imu_link"
+      lidar: "robot1/lidar_link"
+      camera: "robot1/camera_link"
+      camera_optical: "robot1/camera_rgb_optical_frame"
+
+  robot_2:
+    base_frame: "robot2/base_link"
+    odom_frame: "robot2/odom"
+    map_frame: "map"
+    sensor_frames:
+      imu: "robot2/imu_link"
+      lidar: "robot2/lidar_link"
+      camera: "robot2/camera_link"
+      camera_optical: "robot2/camera_rgb_optical_frame"
+
+# Default transforms (static)
+static_transforms:
+  # Base link to base footprint (no offset in this case)
+  base_link_to_base_footprint:
+    parent: "base_link"
+    child: "base_footprint"
+    translation: [0.0, 0.0, 0.0]
+    rotation: [0.0, 0.0, 0.0, 1.0]
+
+  # IMU mounting
+  base_link_to_imu:
+    parent: "base_link"
+    child: "imu_link"
+    translation: [0.0, 0.0, 0.1]
+    rotation: [0.0, 0.0, 0.0, 1.0]
+
+  # LiDAR mounting
+  base_link_to_lidar:
+    parent: "base_link"
+    child: "lidar_link"
+    translation: [0.2, 0.0, 0.5]
+    rotation: [0.0, 0.0, 0.0, 1.0]
+
+  # Camera mounting
+  base_link_to_camera:
+    parent: "base_link"
+    child: "camera_link"
+    translation: [0.2, 0.0, 0.6]
+    rotation: [0.0, 0.0, 0.0, 1.0]
+
+  # Camera optical frame transformation
+  camera_to_camera_optical:
+    parent: "camera_link"
+    child: "camera_rgb_optical_frame"
+    translation: [0.0, 0.0, 0.0]
+    rotation: [-0.5, 0.5, -0.5, 0.5]  # Standard optical frame rotation
+
+# TF Publishing Configuration
+tf_publishing:
+  # Settings for tf broadcasters
+  publish_frequency: 50.0  # Hz
+  use_tf_static: true
+  broadcast_transforms: true
+
+  # Frame publishing filters
+  exclude_frames: []
+  include_frames:
+    - "base_link"
+    - "base_footprint"
+    - "imu_link"
+    - "lidar_link"
+    - "camera_link"
+    - "camera_rgb_optical_frame"
+    - "odom"
+    - "map"
+
+# Validation parameters
+validation:
+  # Parameters for validating TF tree integrity
+  max_parent_child_distance: 5.0  # meters
+  min_update_rate: 10.0  # Hz
+  max_transform_delay: 0.1  # seconds
