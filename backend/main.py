@@ -17,12 +17,10 @@ COLLECTION_NAME = "book_content"
 cohere_client = cohere.Client(os.getenv("COHERE_API_KEY"))
 EMBED_MODEL = "embed-english-v3.0"
 
-# Connect to Qdrant Cloud
 qdrant = QdrantClient(
     url=QDRANT_URL,
     api_key=QDRANT_KEY 
 )
-
 
 def get_all_urls(sitemap_url):
     xml = requests.get(sitemap_url).text
@@ -63,20 +61,11 @@ def chunk_text(text, max_chars=1200):
 def embed(text):
     response = cohere_client.embed(
         model=EMBED_MODEL,
-        input_type="search_query",  # Use search_query for queries
+        input_type="search_query",  
         texts=[text],
     )
-    return response.embeddings[0]  # Return the first embedding
+    return response.embeddings[0]  
 
-# def create_collection():
-#     print("\nCreating Qdrant collection...")
-#     qdrant.recreate_collection(
-#         collection_name=COLLECTION_NAME,
-#         vectors_config=VectorParams(
-#         size=1024,        # Cohere embed-english-v3.0 dimension
-#         distance=Distance.COSINE
-#         )
-#     )
 def create_collection():
     if qdrant.collection_exists(COLLECTION_NAME):
         qdrant.delete_collection(COLLECTION_NAME)
@@ -107,24 +96,6 @@ def save_chunk_to_qdrant(chunk, chunk_id, url):
             )
         ]
     )
-
-
-# def ingest_book():
-#     urls = get_all_urls(SITEMAP_URL)
-#     create_collection()
-#     global_id = 1
-#     for url in urls:
-#         print("\nProcessing:", url)
-#         text = extract_text_from_url(url)
-#         if not text:
-#             continue
-#         chunks = chunk_text(text)
-#         for ch in chunks:
-#             save_chunk_to_qdrant(ch, global_id, url)
-#             print(f"Saved chunk {global_id}")
-#             global_id += 1
-#     print("\n✔️ Ingestion completed!")
-#     print("Total chunks stored:", global_id - 1)
 
 def ingest_book():
     urls = get_all_urls(SITEMAP_URL)
