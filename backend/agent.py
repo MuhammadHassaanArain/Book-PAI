@@ -25,7 +25,7 @@ import cohere
 from qdrant_client import QdrantClient
 
 # Initialize Cohere client
-cohere_client = cohere.Client("ec4xn14zJqwv90wCMiK8QYcJWtDJ8cwrHVMb6e6Y")
+cohere_client = cohere.Client(os.getenv("COHERE_API_KEY"))
 # Connect to Qdrant
 qdrant = QdrantClient(
     url=qdrant_url,
@@ -44,16 +44,15 @@ def get_embedding(text):
     return response.embeddings[0]  # Return the first embedding
 
 
-@function_tool
+# @function_tool
 def retrieve(query):
     embedding = get_embedding(query)
     result = qdrant.query_points(
-        collection_name="humanoid_ai_book",
+        collection_name="book_content",
         query=embedding,
         limit=5
     )
     return [point.payload["text"] for point in result.points]
-
 
 
 agent = Agent(
