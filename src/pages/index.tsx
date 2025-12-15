@@ -28,11 +28,6 @@ function HomepageHeader() {
               to="/docs/intro">
               Start Learning 🚀
             </Link>
-            {/* <Link
-              className={clsx('button button--outline button--lg', styles.secondaryButton)}
-              to="/docs/modules">
-              View Repo 📚
-            </Link> */}
             <Link
               className={clsx('button button--outline button--lg', styles.secondaryButton)}
               href="https://github.com/MuhammadHassaanArain/Book-PAI.git"

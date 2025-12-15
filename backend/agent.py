@@ -13,7 +13,7 @@ set_tracing_disabled(disabled=True)
 app = FastAPI(title="AI Chat Assistant API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Add your frontend URLs
+    allow_origins=["*"],  # Allow all origins for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,7 +30,7 @@ provider = AsyncOpenAI(
 )
 
 model = OpenAIChatCompletionsModel(
-    model="gemini-2.5-flash",
+    model="gemini-2.0-flash",
     openai_client=provider
 )
 
