@@ -30,7 +30,7 @@ provider = AsyncOpenAI(
 )
 
 model = OpenAIChatCompletionsModel(
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     openai_client=provider
 )
 
@@ -39,7 +39,6 @@ config = RunConfig(
     model_provider=provider,
     tracing_disabled=True
 )
-
 
 cohere_client = cohere.Client(os.getenv("COHERE_API_KEY"))
 qdrant = QdrantClient(
