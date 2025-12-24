@@ -19,7 +19,7 @@ export interface ErrorResponse {
 export const chatAPI = {
   async sendMessage(request: ChatRequest): Promise<ChatResponse> {
     try {
-      const response = await fetch('https://shutuphassaan-paihr-book.hf.space/api/chat', {
+      const response = await fetch('https://shutuphassaan-paihr-book.hf.space/agent/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
