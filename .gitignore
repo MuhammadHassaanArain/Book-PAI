@@ -28,6 +28,8 @@ coverage.xml
 *.cover
 *.log
 .pytest_cache/
+*.egg-info/
+dist/
 
 # ROS 2
 build/
@@ -50,8 +52,29 @@ ENV/
 # Docker
 .dockerignore
 
+# FastAPI/Backend
+/backend/__pycache__/
+/backend/*.py[cod]
+/backend/*.log
+/backend/venv/
+/backend/.venv/
+/backend/env/
+/backend/.env*
+
+# Docusaurus
+/node_modules
+/build
+.docusaurus/
+.cache-loader
+*.log
+
 # Misc
 .DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
 .env.local
 .env.development.local
 .env.test.local
@@ -60,3 +83,6 @@ ENV/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

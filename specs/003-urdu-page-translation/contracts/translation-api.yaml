@@ -1,0 +1,76 @@
+# Translation API Contract
+
+## POST /api/translate
+
+### Description
+Translates English text content to Urdu using AI translation service.
+
+### Request
+```
+POST /api/translate
+Content-Type: application/json
+```
+
+#### Request Body
+```json
+{
+  "text": "string (required) - The English text content to translate",
+  "sourceLanguage": "string (optional) - Source language code, default: 'en'",
+  "targetLanguage": "string (optional) - Target language code, default: 'ur'"
+}
+```
+
+### Response
+
+#### Success Response (200 OK)
+```json
+{
+  "translated_text": "string - The translated Urdu text",
+  "source_text": "string - The original text that was translated",
+  "source_language": "string - Source language code",
+  "target_language": "string - Target language code",
+  "translation_time": "string - ISO 8601 timestamp of translation completion",
+  "success": "boolean - Whether translation was successful"
+}
+```
+
+#### Error Response (400 Bad Request)
+```json
+{
+  "error": "string - Error message explaining the failure",
+  "success": "boolean - false",
+  "code": "string - Error code"
+}
+```
+
+#### Error Response (500 Internal Server Error)
+```json
+{
+  "error": "string - Error message explaining the failure",
+  "success": "boolean - false",
+  "code": "string - Error code"
+}
+```
+
+### Examples
+
+#### Request Example
+```json
+{
+  "text": "This is a sample text that needs to be translated to Urdu.",
+  "sourceLanguage": "en",
+  "targetLanguage": "ur"
+}
+```
+
+#### Response Example
+```json
+{
+  "translated_text": "یہ ایک نمونہ متن ہے جسے اردو میں ترجمہ کرنے کی ضرورت ہے۔",
+  "source_text": "This is a sample text that needs to be translated to Urdu.",
+  "source_language": "en",
+  "target_language": "ur",
+  "translation_time": "2025-12-22T10:30:00Z",
+  "success": true
+}
+```
