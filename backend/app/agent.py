@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 
-gemini_api_key = os.getenv("GEMINI_API_KEY")
+gemini_api_key = os.getenv("GEMINI_API_KEY_CHATBOT")
 qdrant_url = os.getenv("QDRANT_URL")
 qdrant_key = os.getenv("QDRANT_KEY")
 
