@@ -3,21 +3,13 @@ import cohere
 from dotenv import load_dotenv
 from pydantic import BaseModel
 from qdrant_client import QdrantClient
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from agents import Agent, Runner, OpenAIChatCompletionsModel, AsyncOpenAI,RunConfig, set_tracing_disabled, function_tool
+from fastapi import APIRouter, HTTPException
+from agents import Agent, Runner, OpenAIChatCompletionsModel, AsyncOpenAI, RunConfig, set_tracing_disabled, function_tool
 
 load_dotenv()
 set_tracing_disabled(disabled=True)
 
-app = FastAPI(title="AI Chat Assistant API")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+router = APIRouter()
 
 
 gemini_api_key = os.getenv("GEMINI_API_KEY_CHATBOT")
@@ -43,18 +35,17 @@ config = RunConfig(
 cohere_client = cohere.Client(os.getenv("COHERE_API_KEY"))
 qdrant = QdrantClient(
     url=qdrant_url,
-    api_key=qdrant_key 
+    api_key=qdrant_key
 )
 
 def get_embedding(text):
     """Get embedding vector from Cohere Embed v3"""
     response = cohere_client.embed(
         model="embed-english-v3.0",
-        input_type="search_query", 
+        input_type="search_query",
         texts=[text],
     )
-    return response.embeddings[0]  
-
+    return response.embeddings[0]
 
 @function_tool
 def retrieve(query):
@@ -78,7 +69,7 @@ If the answer is not in the retrieved content, say "I don't know".
     model=model,
     tools=[retrieve]
 )
- 
+
 class ChatRequest(BaseModel):
     message: str
 
@@ -86,29 +77,19 @@ class ChatResponse(BaseModel):
     response: str
     status: str
 
-@app.post("/api/chat", response_model=ChatResponse)
+@router.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
         if not request.message:
             raise HTTPException(status_code=400, detail="Message is required")
-        
+
         result = await Runner.run(agent, request.message, run_config=config)
-        
+
         return ChatResponse(
             response=result.final_output,
             status="success"
         )
-    
+
     except Exception as e:
         print(f"Error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/")
-async def root():
-    return {
-        "message": "AI Chat Assistant API",
-        "endpoints": {
-            "chat": "/api/chat",
-            "docs": "/docs"
-        }
-    }
