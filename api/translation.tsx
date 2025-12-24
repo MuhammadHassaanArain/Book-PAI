@@ -1,5 +1,5 @@
 // Frontend API client for translation service
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const API_BASE_URL = 'https://shutuphassaan-paihr-book.hf.space/api';
 
 /**
  * Translates text from source language to target language

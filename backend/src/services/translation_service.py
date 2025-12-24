@@ -5,8 +5,8 @@ from datetime import datetime
 from typing import Optional
 from dotenv import load_dotenv
 from agents import (Agent,Runner,OpenAIChatCompletionsModel,AsyncOpenAI,RunConfig,)
-from backend.src.models.translation import (TranslationRequest,TranslationResponse,)
-from backend.src.utils.cache import translation_cache
+from ..models.translation import (TranslationRequest,TranslationResponse,)
+from ..utils.cache import translation_cache
 
 load_dotenv()
 logger = logging.getLogger(__name__)
