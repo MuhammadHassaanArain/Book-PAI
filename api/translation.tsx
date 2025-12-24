@@ -1,5 +1,5 @@
 // Frontend API client for translation service
-const API_BASE_URL = 'https://shutuphassaan-paihr-book.hf.space/api';
+const API_BASE_URL = 'https://shutuphassaan-paihr-book.hf.space'
 
 /**
  * Translates text from source language to target language
@@ -13,7 +13,7 @@ export const translateText = async (text, sourceLanguage = 'en', targetLanguage 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-    const response = await fetch(`${API_BASE_URL}/translate`, {
+    const response = await fetch(`${API_BASE_URL}/api/translate/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
