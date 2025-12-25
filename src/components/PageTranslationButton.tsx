@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { translateText } from '../../api/translation'; // Path from src/components to root/api
 import { capturePageContent, prepareContentForTranslation } from '../utils/contentCapture'; // Path from src/components to src/utils
+import styles from './translationButton.module.css';
 
 const PageTranslationButton = () => {
   const [isTranslating, setIsTranslating] = useState(false);
@@ -110,54 +111,25 @@ const PageTranslationButton = () => {
     }
   };
 
-  // Add some basic styling for the button
-  useEffect(() => {
-    // Create a style element for the button if it doesn't exist
-    let styleElement = document.getElementById('translation-button-style');
-    if (!styleElement) {
-      styleElement = document.createElement('style');
-      styleElement.id = 'translation-button-style';
-      styleElement.textContent = `
-        .translation-button {
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          z-index: 10000;
-          margin: 10px 0;
-          padding: 8px 16px;
-          background-color: #007cba;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          opacity: 0.9;
-          font-size: 14px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .translation-button:hover {
-          opacity: 1;
-          background-color: #005a87;
-        }
-        .translation-button:disabled {
-          cursor: not-allowed;
-          opacity: 0.6;
-        }
-      `;
-      document.head.appendChild(styleElement);
-    }
-  }, []);
-
   return (
     <button
       onClick={handleToggle}
       disabled={isTranslating}
-      className="translation-button"
+      className={styles.translationButton}
     >
-      {isTranslating
-        ? 'Translating...'
-        : isTranslated
-          ? 'Show in English'
-          : 'Translate to Urdu'}
+      {isTranslating ? (
+        <>
+          <i className="fas fa-spinner fa-spin"></i> Translating...
+        </>
+      ) : isTranslated ? (
+        <>
+          <i className="fas fa-language"></i> Show in English
+        </>
+      ) : (
+        <>
+          <i className="fas fa-language"></i> Translate to Urdu
+        </>
+      )}
     </button>
   );
 };
