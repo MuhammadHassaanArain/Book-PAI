@@ -95,7 +95,7 @@ const config: Config = {
         },
         // {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/MuhammadHassaanArain/Book-PAI.git',
+          href: 'https://github.com/MuhammadHassaanArain/Book-PAI',
           label: 'GitHub',
           position: 'right',
         },

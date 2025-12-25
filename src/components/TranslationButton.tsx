@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { translateText } from '../../api/translation'; // Path from src/components to root/api
 import { capturePageContent, prepareContentForTranslation } from '../utils/contentCapture'; // Path from src/components to src/utils
+import styles from './translationButton.module.css';
 
 const TranslationButton = ({ pageContent, onPageUpdate }) => {
   const [isTranslating, setIsTranslating] = useState(false);
@@ -52,23 +53,21 @@ const TranslationButton = ({ pageContent, onPageUpdate }) => {
     <button
       onClick={handleToggle}
       disabled={isTranslating}
-      className="translation-button"
-      style={{
-        margin: '10px 0',
-        padding: '8px 16px',
-        backgroundColor: '#007cba',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: isTranslating ? 'not-allowed' : 'pointer',
-        opacity: isTranslating ? 0.6 : 1
-      }}
+      className={styles.inlineTranslationButton}
     >
-      {isTranslating
-        ? 'Translating...'
-        : isTranslated
-          ? 'Show in English'
-          : 'Translate to Urdu'}
+      {isTranslating ? (
+        <>
+          <i className="fas fa-spinner fa-spin"></i> Translating...
+        </>
+      ) : isTranslated ? (
+        <>
+          <i className="fas fa-language"></i> Show in English
+        </>
+      ) : (
+        <>
+          <i className="fas fa-language"></i> Translate to Urdu
+        </>
+      )}
     </button>
   );
 };
