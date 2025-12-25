@@ -7,7 +7,6 @@ class TranslationRequest(BaseModel):
     sourceLanguage: str = "en"
     targetLanguage: str = "ur"
     pageId: Optional[str] = None
-    mode: str = "page"  # "page" or "selection"
 
 class TranslationResponse(BaseModel):
     translated_text: str
