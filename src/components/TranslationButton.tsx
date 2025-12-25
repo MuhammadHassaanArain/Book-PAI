@@ -7,12 +7,31 @@ const TranslationButton = ({ pageContent, onPageUpdate }) => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [isTranslated, setIsTranslated] = useState(false);
   const [originalContent, setOriginalContent] = useState(null);
+  const [translationMode, setTranslationMode] = useState(null); // 'page' or 'selection'
+
+  // Function to get selected text
+  const getSelectedText = () => {
+    const selection = window.getSelection();
+    return selection?.toString().trim() || '';
+  };
 
   const handleTranslate = async () => {
     setIsTranslating(true);
     try {
-      // If no pageContent was provided via prop, capture it dynamically
-      const contentToTranslate = pageContent || capturePageContent();
+      // Check if text is selected
+      const selectedText = getSelectedText();
+      let contentToTranslate = '';
+      let isSelectionMode = false;
+
+      if (selectedText.length > 0) {
+        // Selection mode: translate only selected text
+        contentToTranslate = selectedText;
+        isSelectionMode = true;
+      } else {
+        // Use provided page content or capture it dynamically
+        contentToTranslate = pageContent || capturePageContent();
+        isSelectionMode = false;
+      }
 
       // Validate content before translation
       if (!contentToTranslate || contentToTranslate.trim().length === 0) {
@@ -28,9 +47,10 @@ const TranslationButton = ({ pageContent, onPageUpdate }) => {
 
       const cleanedContent = prepareContentForTranslation(contentToTranslate);
 
-      const response = await translateText(cleanedContent, 'en', 'ur');
+      const response = await translateText(cleanedContent, 'en', 'ur', isSelectionMode ? 'selection' : 'page');
       onPageUpdate(response.translated_text);
       setOriginalContent(contentToTranslate); // Store original for toggling
+      setTranslationMode(isSelectionMode ? 'selection' : 'page'); // Set translation mode
       setIsTranslated(true);
     } catch (error) {
       console.error('Translation failed:', error);
@@ -42,7 +62,10 @@ const TranslationButton = ({ pageContent, onPageUpdate }) => {
 
   const handleToggle = () => {
     if (isTranslated && originalContent) {
+      // For the inline component, we just restore the original content
+      // regardless of whether it was page or selection mode
       onPageUpdate(originalContent);
+      setTranslationMode(null);
       setIsTranslated(false);
     } else {
       handleTranslate();
